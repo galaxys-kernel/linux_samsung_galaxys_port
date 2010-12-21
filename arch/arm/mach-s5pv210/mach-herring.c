@@ -27,7 +27,6 @@
 #include <linux/spi/spi_gpio.h>
 #include <linux/clk.h>
 #include <linux/usb/ch9.h>
-#include <linux/input/cypress-touchkey.h>
 #include <linux/input.h>
 #include <linux/irq.h>
 #include <linux/skbuff.h>
@@ -1162,7 +1161,7 @@ static struct platform_device s3c_device_i2c14 = {
 	.id			= 14,
 	.dev.platform_data	= &i2c14_platdata,
 };
-
+/*
 static void touch_keypad_gpio_init(void)
 {
 	int ret = 0;
@@ -1183,10 +1182,11 @@ static void touch_keypad_onoff(int onoff)
 }
 
 static const int touch_keypad_code[] = {
+        NULL,
 	KEY_MENU,
 	KEY_HOME,
-	KEY_BACK,
-	KEY_SEARCH
+	KEY_ENTER,
+	KEY_END
 };
 
 static struct touchkey_platform_data touchkey_data = {
@@ -1194,6 +1194,7 @@ static struct touchkey_platform_data touchkey_data = {
 	.keycode = touch_keypad_code,
 	.touchkey_onoff = touch_keypad_onoff,
 };
+*/
 
 static struct gpio_event_direct_entry herring_keypad_key_map[] = {
 	{
@@ -2006,9 +2007,9 @@ static struct i2c_board_info i2c_devs2[] __initdata = {
 /* I2C2 */
 static struct i2c_board_info i2c_devs10[] __initdata = {
 	{
-		I2C_BOARD_INFO(CYPRESS_TOUCHKEY_DEV_NAME, 0x20),
-		.platform_data  = &touchkey_data,
-		.irq = (IRQ_EINT_GROUP22_BASE + 1),
+		I2C_BOARD_INFO("melfas_touchkey", 0x20),
+		//.platform_data  = &touchkey_data,
+		//.irq = (IRQ_EINT_GROUP22_BASE + 1),
 	},
 };
 
@@ -4319,7 +4320,7 @@ static void __init herring_machine_init(void)
 		i2c_register_board_info(5, i2c_devs5, ARRAY_SIZE(i2c_devs5));
 	i2c_register_board_info(6, i2c_devs6, ARRAY_SIZE(i2c_devs6));
 	/* Touch Key */
-	touch_keypad_gpio_init();
+	//touch_keypad_gpio_init();
 	i2c_register_board_info(10, i2c_devs10, ARRAY_SIZE(i2c_devs10));
 	/* FSA9480 */
 	fsa9480_gpio_init();
